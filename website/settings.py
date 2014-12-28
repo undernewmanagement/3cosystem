@@ -37,7 +37,6 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.gis',
-    #'tech_events.apps.TechEventsAppConfig',
     'tech_events',
     'geography',
     'location_field'
