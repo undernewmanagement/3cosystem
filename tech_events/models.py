@@ -121,17 +121,17 @@ def meetup_group_post_save(sender, instance, **kwargs):
                 (lat,lng) = i['GEO'].to_ical().split(';')
 
                 updated_values = {
-                    'begin_time' : i.get('DTSTART').dt,
-                    'url       ' : i['URL'],
-                    'name      ' : i['SUMMARY'],
-                    'source    ' : 'MU',
+                    'begin_time'      : i.get('DTSTART').dt,
+                    'url'             : i['URL'],
+                    'name'            : i['SUMMARY'],
+                    'source'          : 'MU',
                     'meetup_group_id' : instance.id,
-                    'is_active  ' : True,
-                    'address    ' : i.get('LOCATION','See event page for details'),
-                    'city       ' : '',
-                    'postal_code' : '',
-                    'country    ' : '',
-                    'location   ' : 'POINT (%s %s)' % (lng,lat)
+                    'is_active'       : True,
+                    'address'         : i.get('LOCATION','See event page for details'),
+                    'city'            : '',
+                    'postal_code'     : '',
+                    'country'         : '',
+                    'location'        : 'POINT (%s %s)' % (lng,lat)
                 }
 
                 t = TechEvent.objects.update_or_create(uniqid=uniqid, defaults=updated_values)

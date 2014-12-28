@@ -1,8 +1,14 @@
 from django.contrib import admin
 from tech_events.models import MeetupGroup, TechEvent, ParseError
 
-admin.site.register(MeetupGroup)
+
+class MeetupGroupAdmin(admin.ModelAdmin):
+    exclude      = ('name','location',)
+    list_display = ('name','url') 
+    list_filter  = ('is_blacklisted',)
+    search_fields = ['name','url']
+
+
+admin.site.register(MeetupGroup, MeetupGroupAdmin)
 admin.site.register(TechEvent)
 admin.site.register(ParseError)
-
-# Register your models here.
