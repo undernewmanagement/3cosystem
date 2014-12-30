@@ -38,9 +38,9 @@ class TechEvent(models.Model):
     meetup_group = models.ForeignKey(MeetupGroup,null=True)
     is_active   = models.BooleanField(default=True)
     address     = models.CharField(max_length=255)
-    city        = models.CharField(max_length=100)
-    postal_code = models.CharField(max_length=20)
-    country     = models.CharField(max_length=50)
+    city        = models.CharField(max_length=100,null=True)
+    postal_code = models.CharField(max_length=20,null=True)
+    country     = models.CharField(max_length=50,null=True)
     location    = LocationField(based_fields=[address,city,postal_code], zoom=7, default='POINT (0.0 0.0)')
     objects     = models.GeoManager()
 
