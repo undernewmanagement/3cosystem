@@ -3,8 +3,10 @@ from django.contrib.gis.geos import Point
 
 from location_field.models.spatial import LocationField
 
+from validators import *
+
 class MeetupGroup(models.Model):
-    url         = models.CharField(max_length=100,unique=True)
+    url         = models.CharField(max_length=100,unique=True,validators=[validate_meetup_url_exists])
     name        = models.CharField(max_length=100)
     is_blacklisted = models.BooleanField(default=False)
     location    = models.PointField(null=True)
