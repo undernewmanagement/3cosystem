@@ -66,6 +66,7 @@ DATABASES = {
         'ENGINE'   : 'django.contrib.gis.db.backends.postgis',
         'NAME'     : '3cosystem_django',
         'USER'     : 'sherazsharif',
+        'PASSWORD' : 'abc123',
         'HOST'     : 'localhost',
     }
 }
