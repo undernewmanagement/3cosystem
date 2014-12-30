@@ -35,7 +35,7 @@ class TechEvent(models.Model):
     url         = models.URLField()
     begin_time  = models.DateTimeField('begin time')
     source      = models.CharField(max_length=2, choices=SOURCE_CHOICES, default=CUSTOM)
-    meetup_group = models.ForeignKey(MeetupGroup,null=True)
+    meetup_group = models.ForeignKey(MeetupGroup,null=True, blank=True)
     is_active   = models.BooleanField(default=True)
     address     = models.CharField(max_length=255)
     city        = models.CharField(max_length=100,null=True)
