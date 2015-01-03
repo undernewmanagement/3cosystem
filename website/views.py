@@ -21,7 +21,7 @@ def home(request):
             'cities'  : [],
         }
         for city in country.cities.all():
-            t = TechEvent.objects.filter(location__distance_lte=(city.location, D(m=city.distance*1000))).filter(begin_time__range=(today,end_date)).order_by('begin_time').count()
+            t = TechEvent.objects.filter(location__distance_lte=(city.location, D(m=city.distance*1000))).filter(is_active=True).filter(begin_time__range=(today,end_date)).order_by('begin_time').count()
             carr['cities'].append({
                 'name' : city.short_name,
                 'slug' : city.slug,
@@ -43,7 +43,7 @@ def city(request,city):
     today    = datetime.combine(d, datetime.min.time()).replace(tzinfo=pytz.utc)
     end_date = today + timedelta(days=31)
 
-    t = TechEvent.objects.filter(location__distance_lte=(c.location, D(m=c.distance*1000))).filter(begin_time__range=(today,end_date)).order_by('begin_time')
+    t = TechEvent.objects.filter(location__distance_lte=(c.location, D(m=c.distance*1000))).filter(is_active=True).filter(begin_time__range=(today,end_date)).order_by('begin_time')
 
     ret = {
         'city'             : c,
