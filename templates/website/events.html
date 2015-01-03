@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block meta_description %}Find local tech and startup events in {{city.short_name}}{% endblock %}
+{% block title %}Local tech and startup events in {{city.short_name}}{% endblock %}
+
+{% block back_button %}
+<a href="/" class="back">&#12296; Back</a>
+{% endblock %}
+
+{% block content %}
+<h1>Local tech and startup events in {{city.short_name}}</h1>
+
+{% for date,values in days.items %}
+<h2 class="pure-g">
+    <div class="pure-u-2-5">{{values.date}}</div>
+    <div class="pure-u-3-5 date">{{values.dow}}</div>
+</h2>
+    {% for event in values.events %}
+    <div class="event">
+    <a itemprop="name" href="{{event.url}}" title="{{event.name}}">{{event.name}}</a>
+    <div itemprop="location" itemscope itemtype="http://schema.org/Place">
+    <small>
+    <strong>{{event.begin_time|time:"H:i"}}</strong> {{event.address}}</small>
+    </div>
+</div>
+    {% endfor %}
+ 
+{% endfor %}
+
+{% endblock %}

@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block meta_description %}{{ meta.description }}{% endblock %}
+{% block title %}{{ meta.title }}{% endblock %}
+
+{% block content %}
+{% for country in countries %}
+<h2>{{ country.country }}</h2>
+    {% for city in country.cities %}
+    <div class="city">
+        <a href="/{{city.slug}}" >{{city.name}}</a>
+        <small>{{city.count}} events this month</small>
+    </div>
+    {% endfor %}
+{% endfor %}
+
+{% endblock %}

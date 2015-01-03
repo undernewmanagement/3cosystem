@@ -1,5 +1,5 @@
 from django.contrib import admin
-from tech_events.models import MeetupGroup, TechEvent, ParseError
+from apps.tech_events.models import MeetupGroup, TechEvent, ParseError
 
 
 class MeetupGroupAdmin(admin.ModelAdmin):

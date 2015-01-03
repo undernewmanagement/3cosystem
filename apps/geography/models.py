@@ -38,7 +38,7 @@ class Country(models.Model):
 class City(models.Model):
     short_name  = models.CharField(max_length=50)
     long_name   = models.CharField(max_length=50)
-    country     = models.ForeignKey('Country')
+    country     = models.ForeignKey('Country', related_name="cities")
     slug        = models.SlugField(unique=True)
     distance    = models.IntegerField()
     is_active   = models.BooleanField(default=False)
