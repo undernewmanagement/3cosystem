@@ -10,6 +10,9 @@ from django.contrib.gis.measure import D
 
 def home(request):
     countries = Country.objects.filter(region='EU')
+    d        = datetime.utcnow().replace(tzinfo=pytz.utc)
+    today    = datetime.combine(d, datetime.min.time()).replace(tzinfo=pytz.utc)
+    end_date = today + timedelta(days=31)
 
     ret = []
     for country in countries:
@@ -18,7 +21,7 @@ def home(request):
             'cities'  : [],
         }
         for city in country.cities.all():
-            t = TechEvent.objects.filter(location__distance_lte=(city.location, D(m=city.distance*1000))).order_by('begin_time').count()
+            t = TechEvent.objects.filter(location__distance_lte=(city.location, D(m=city.distance*1000))).filter(begin_time__range=(today,end_date)).order_by('begin_time').count()
             carr['cities'].append({
                 'name' : city.short_name,
                 'slug' : city.slug,
