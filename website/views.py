@@ -9,7 +9,7 @@ import pytz
 from django.contrib.gis.measure import D
 
 def home(request):
-    countries = Country.objects.filter(region='EU').order_by('name')
+    countries = Country.objects.order_by('name')
     d        = datetime.utcnow().replace(tzinfo=pytz.utc)
     today    = datetime.combine(d, datetime.min.time()).replace(tzinfo=pytz.utc)
     end_date = today + timedelta(days=31)
