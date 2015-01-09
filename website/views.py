@@ -8,6 +8,10 @@ import pytz
 
 from django.contrib.gis.measure import D
 
+from django.views.decorators.cache import cache_page
+
+
+@cache_page(60 * 15)
 def home(request):
     countries = Country.objects.order_by('name')
     d        = datetime.utcnow().replace(tzinfo=pytz.utc)
@@ -33,6 +37,7 @@ def home(request):
 
 
 
+@cache_page(60 * 15)
 def city(request,city):
     try:
         c = City.objects.get(slug=city) 
