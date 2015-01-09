@@ -1,5 +1,7 @@
 {% extends "base.html" %}
 
+{% load tz %}
+
 {% block meta_description %}Find local tech and startup events in {{city.short_name}}{% endblock %}
 {% block title %}Local tech and startup events in {{city.short_name}}{% endblock %}
 
@@ -20,10 +22,11 @@
     <a itemprop="name" href="{{event.url}}" title="{{event.name}}">{{event.name}}</a>
     <div itemprop="location" itemscope itemtype="http://schema.org/Place">
     <small>
-    <strong>{{event.begin_time|time:"H:i"}}</strong> {{event.address}}</small>
+        <!--<strong>{{event.begin_time|time:"H:i"}}</strong>--> {{event.address}}
+    </small>
     </div>
 </div>
-    {% endfor %}
+{% endfor %}
  
 {% endfor %}
 
