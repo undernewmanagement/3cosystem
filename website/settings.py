@@ -41,7 +41,8 @@ INSTALLED_APPS = (
     'django.contrib.gis',
     'apps.tech_events',
     'apps.geography',
-    'location_field'
+    'apps.companies',
+    'location_field',
 
 )
 
