@@ -4,6 +4,7 @@
 {% block title %}{{ meta.title }}{% endblock %}
 
 {% block content %}
+<h1>Find startup and tech events world-wide</h1>
 {% for country in countries %}
 <h2>{{ country.country }}</h2>
     {% for city in country.cities %}
