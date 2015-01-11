@@ -19,7 +19,7 @@
 </h2>
     {% for event in values.events %}
     <div class="event">
-    <a itemprop="name" href="{{event.url}}" title="{{event.name}}">{{event.name}}</a>
+    <a itemprop="name" href="{{event.url}}" title="{{event.name}}" onclick=”trackOutboundLink('{{event.url}}'); return false;">{{event.name}}</a>
     <div itemprop="location" itemscope itemtype="http://schema.org/Place">
     <small>
         <!--<strong>{{event.begin_time|time:"H:i"}}</strong>--> {{event.address}}
