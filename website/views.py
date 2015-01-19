@@ -13,7 +13,7 @@ from django.views.decorators.cache import cache_page
 
 @cache_page(60 * 15)
 def home(request):
-    countries = Country.objects.order_by('name')
+    countries = Country.objects.filter(is_active=True).order_by('name')
     d        = datetime.utcnow().replace(tzinfo=pytz.utc)
     today    = datetime.combine(d, datetime.min.time()).replace(tzinfo=pytz.utc)
     end_date = today + timedelta(days=31)
