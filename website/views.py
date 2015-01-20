@@ -33,7 +33,13 @@ def home(request):
             })
         ret.append(carr)
 
-    return render(request,'website/home.html',{'countries' : ret })
+    return render(request,'website/home.html',{
+        'countries' : ret,
+        'meta'      : {
+            'description' : 'We have the biggest, baddest list of local tech and startup events in over 65 cities',
+            'title'   : 'Local startup and tech events in your city | 3cosystem'
+        }
+    })
 
 
 
@@ -51,8 +57,12 @@ def city(request,city):
     t = TechEvent.objects.filter(location__distance_lte=(c.location, D(m=c.distance*1000))).filter(is_active=True).filter(begin_time__range=(today,end_date)).order_by('begin_time')
 
     ret = {
-        'city'             : c,
-        'days'             : reshape_events(t)
+        'city' : c,
+        'days' : reshape_events(t),
+        'meta' : {
+            'description' : "%s has %d tech and startup events scheduled over the next 30 days" % (c.short_name, len(t)),
+            'title'   : "%d upcoming tech and startup events in %s" % (len(t), c.short_name)
+        }
     }
 
     return render(request,'website/events.html', ret)

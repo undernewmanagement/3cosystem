@@ -2,11 +2,14 @@
 
 {% load tz %}
 
-{% block meta_description %}Find local tech and startup events in {{city.short_name}}{% endblock %}
-{% block title %}Local tech and startup events in {{city.short_name}}{% endblock %}
+{% block meta %}
+{% with 'meta' as {{meta}} %}
+    {{block.super}}
+{% endwith %}
+{% endblock %}
 
 {% block back_button %}
-<a href="/" class="back">&#12296; Back</a>
+<a href="/" class="back" rel="nofollow">&#12296; Back</a>
 {% endblock %}
 
 {% block content %}
@@ -18,15 +21,16 @@
     <div class="pure-u-3-5 date">{{values.dow}}</div>
 </h2>
     {% for event in values.events %}
-    <div class="event">
-    <a itemprop="name" href="{{event.url}}" title="{{event.name}}" onclick=”trackOutboundLink('{{event.url}}'); return false;">{{event.name}}</a>
-    <div itemprop="location" itemscope itemtype="http://schema.org/Place">
-    <small>
-        <!--<strong>{{event.begin_time|time:"H:i"}}</strong>--> {{event.address}}
-    </small>
+    <div class="event" itemscope itemtype="http://schema.org/Event">
+        <a itemprop="url" href="{{event.url}}" title="{{event.name}}" onclick="trackOutboundLink('{{event.url}}'); return false;"><span itemprop="name">{{event.name}}</span></a>
+        <small>
+            <!--<time itemprop="doorTime" datetime="YYYY-MM-DD HH:mm">{{event.begin_time|time:"H:i"}}</time>--> 
+            <span itemprop="location" itemscope itemtype="http://schema.org/Place">
+                <span itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">{{event.address}}</span>
+            </span>
+        </small>
     </div>
-</div>
-{% endfor %}
+    {% endfor %}
  
 {% endfor %}
 

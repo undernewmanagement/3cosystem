@@ -1,10 +1,13 @@
 {% extends "base.html" %}
 
-{% block meta_description %}{{ meta.description }}{% endblock %}
-{% block title %}{{ meta.title }}{% endblock %}
+{% block meta %}
+{% with 'meta' as {{meta}} %} 
+    {{block.super}}
+{% endwith %}
+{% endblock %}
 
 {% block content %}
-<h1>Find startup and tech events world-wide</h1>
+<h1>Startup and tech events in over 65 cities world-wide</h1>
 {% for country in countries %}
 <h2>{{ country.country }}</h2>
     {% for city in country.cities %}
