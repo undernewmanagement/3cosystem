@@ -56,3 +56,7 @@ def city(request,city):
     }
 
     return render(request,'website/events.html', ret)
+
+def sitemap(request):
+    cities = City.objects.filter(is_active=True).all()
+    return render(request, 'sitemap.xml', { 'cities' : cities})

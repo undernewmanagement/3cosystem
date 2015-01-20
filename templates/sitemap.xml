@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"> 
+<url>
+    <loc>http://www.3cosystem.com/</loc>
+    <lastmod>{% now "Y-M-D" }</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.5</priority>
+</url>
+{% for city in cities %}
+<url>
+    <loc>http://www.3cosystem.com/{{city.slug}}</loc>
+    <lastmod>{% now "Y-M-D" }</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.5</priority>
+</url>
+{% endfor %}
+</urlset>
