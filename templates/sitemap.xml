@@ -9,7 +9,7 @@
 {% for city in cities %}
 <url>
     <loc>http://www.3cosystem.com/{{city.slug}}</loc>
-    <lastmod>{% now "Y-M-D" %}</lastmod>
+    <lastmod>{% now "Y-m-d" %}</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
 </url>
