@@ -20,13 +20,13 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 SECRET_KEY = ')d!*@pc5&i#=dn*8&ljtol*i*o-^j9z@*$63j51y1!pqy=gjx0'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-TEMPLATE_DEBUG = False
+TEMPLATE_DEBUG = True
 TEMPLATE_DIRS = [os.path.join(BASE_DIR, 'templates')]
 
 
-ALLOWED_HOSTS = ['www.3cosystem.com','cp.3cosystem.com','3cosystem.com']
+ALLOWED_HOSTS = []
 
 
 # Application definition
