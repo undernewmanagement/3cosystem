@@ -1,0 +1,24 @@
+<tr>
+    <th>{{items.name}}</th>
+    <td>
+        <ul>
+            {% for i in items.idea %}
+            <li><a href="{{i.url}}" rel="nofollow">{{i.name}}</a></li>
+            {% endfor %}
+        </ul>
+    </td>
+    <td>
+        <ul>
+            {% for i in items.startup %}
+            <li><a href="{{i.url}}" rel="nofollow">{{i.name}}</a></li>
+            {% endfor %}
+        </ul>
+    </td>
+    <td>
+        <ul>
+            {% for i in items.growth %}
+            <li><a href="{{i.url}}" rel="nofollow">{{i.name}}</a></li>
+            {% endfor %}
+        </ul>
+    </td>
+</tr>

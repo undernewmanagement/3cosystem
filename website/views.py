@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.http import Http404
 from apps.geography.models import City, Country
 from apps.tech_events.models import TechEvent
+from apps.companies.models import Category, Company
 from website.utils import reshape_events
 from datetime import datetime, timedelta
 import pytz
@@ -67,6 +68,38 @@ def city(request,city):
 
     return render(request,'website/events.html', ret)
 
+def city_ecosystem(request,city):
+    try:
+        c = City.objects.get(slug=city) 
+    except City.DoesNotExist:
+        raise Http404
+
+
+    categories = Category.objects.order_by('-weight').all()
+
+    grid = []
+    for category in categories:
+        block = {
+            'name' : category.name,
+            'idea'    : Company.objects.filter(cities=c).filter(stages__name='Idea').filter(categories=category).all(),
+            'startup' : Company.objects.filter(cities=c).filter(stages__name='Startup').filter(categories=category).all(),
+            'growth'  : Company.objects.filter(cities=c).filter(stages__name='Growth').filter(categories=category).all() 
+        }
+        grid.append(block)
+        
+    ret = {
+        'city' : c,
+        'grid' : grid,
+        'meta' : {
+            'description' : "description here %s" % (c.short_name),
+            'title'   : "Discover the tech and startup ecosystem in %s" % (c.short_name)
+        }
+    }
+    return render(request,'website/ecosystem.html', ret)
+
+
+
 def sitemap(request):
     cities = City.objects.filter(is_active=True).all()
     return render(request, 'sitemap.xml', { 'cities' : cities})
+

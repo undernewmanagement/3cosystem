@@ -135,6 +135,38 @@
         margin: 0 auto;
         text-align: center;
     }
+    table {
+        font-size: 0.75em;
+        margin: 0 auto;
+    }
+    th {
+        text-transform: uppercase;
+        font-size: 1.5em !important;
+    }
+    thead th {
+        text-align: center;    
+    }
+    tbody th {
+        text-align: right;
+    }
+    table a {
+        text-decoration: none;
+        color: black;
+        border-bottom: 1px dotted #999;
+    }
+    table ul {
+        list-style: none;
+    }
+    table ul li {
+        padding: 0;
+        margin: 0 0 0.5em 0;
+    }
+    footer {
+        margin-top: 1em;
+        text-align: center;
+        font-size: 0.75em;
+        color: #aaa;
+    }
     </style>
 
     <script>
@@ -161,6 +193,7 @@
     <div class="pure-u-1-3"></div>
 </header>
 {% block content %}{% endblock %}
+<footer>All content copyright &copy;2015 3cosystem.</footer>
 <script>
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
         (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),

@@ -42,6 +42,7 @@ class City(models.Model):
     slug        = models.SlugField(unique=True)
     distance    = models.IntegerField()
     is_active   = models.BooleanField(default=False)
+    ecosystem_is_active = models.BooleanField(default=False)
     location    = LocationField(based_fields=[long_name],zoom=7,default='POINT(0.0 0.0)')
     objects     = models.GeoManager()
 

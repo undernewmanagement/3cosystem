@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% load tz %}
+
+{% block meta %}
+{% with 'meta' as {{meta}} %}
+    {{block.super}}
+{% endwith %}
+{% endblock %}
+
+{% block back_button %}
+<a href="/{{city.short_name}}" class="back" rel="nofollow">&#12296; Back</a>
+{% endblock %}
+
+{% block content %}
+<h1>An overview of the tech and startup ecosystem in {{city.short_name}}</h1>
+
+<table class="pure-table pure-table-horizontal">
+    <thead>
+        <tr>
+            <th></th>
+            <th>Ideas</th>
+            <th>Startups</th>
+            <th>Growth</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for content in grid %}
+            {% include "website/_ecosystem_tr.html" with items=content only %}
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}
