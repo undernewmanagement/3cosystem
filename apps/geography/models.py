@@ -53,3 +53,8 @@ class City(models.Model):
         return self.long_name
 
 
+class Attribution(models.Model):
+    name = models.CharField(max_length=100)
+    url  = models.URLField(max_length=255)
+    comments = models.CharField(max_length=255,blank=True)
+    city = models.ForeignKey('City', related_name="attributions")
