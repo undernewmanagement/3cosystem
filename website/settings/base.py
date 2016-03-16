@@ -26,7 +26,12 @@ TEMPLATE_DEBUG = False
 TEMPLATE_DIRS = [os.path.join(BASE_DIR, 'templates')]
 
 
-ALLOWED_HOSTS = ['www.3cosystem.com','cp.3cosystem.com','3cosystem.com']
+ALLOWED_HOSTS = [
+    'www.3cosystem.com',
+    '3cosystem.com',
+    'www.3cosystem.com.',
+    '3cosystem.com.'
+]
 
 
 # Application definition
