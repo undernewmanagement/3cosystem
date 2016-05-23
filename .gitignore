@@ -6,3 +6,4 @@ venv/
 envs
 .envs
 dist/
+staticfiles/
