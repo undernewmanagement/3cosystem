@@ -45,6 +45,7 @@ class City(models.Model):
     ecosystem_is_active = models.BooleanField(default=False)
     location    = LocationField(based_fields=[long_name],zoom=7,default='POINT(0.0 0.0)')
     objects     = models.GeoManager()
+    hashtags    = models.CharField(max_length=50, blank=True, null=True )
 
     class Meta:
         verbose_name_plural = "Cities"
