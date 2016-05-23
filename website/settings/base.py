@@ -14,7 +14,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__)) + '/../'
 
 PROJECT_DIR=BASE_DIR
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
-STATIC_ROOT = os.path.join(PROJECT_DIR, 'dist')
+STATIC_ROOT = os.path.join(PROJECT_DIR, 'staticfiles')
 
 
 # Quick-start development settings - unsuitable for production
