@@ -26,7 +26,12 @@ def home(request):
             'cities'  : [],
         }
         for city in country.cities.filter(is_active=True).all():
-            t = TechEvent.objects.filter(location__distance_lte=(city.location, D(m=city.distance*1000))).filter(is_active=True).filter(begin_time__range=(today,end_date)).order_by('begin_time').count()
+            t = TechEvent.objects\
+                    .filter(location__distance_lte=(city.location, D(m=city.distance*1000)))\
+                    .filter(is_active=True)\
+                    .filter(meetup_group__is_blacklisted=False)\
+                    .filter(begin_time__range=(today,end_date))\
+                    .order_by('begin_time').count()
             carr['cities'].append({
                 'name' : city.short_name,
                 'slug' : city.slug,
@@ -36,33 +41,37 @@ def home(request):
 
     return render(request,'website/home.html',{
         'countries' : ret,
-        'meta'      : {
-            'description' : 'We have the biggest, baddest list of local tech and startup events in over 65 cities',
-            'title'   : 'Local startup and tech events in your city | 3cosystem'
+        'meta': {
+            'description': 'We have the biggest, baddest list of local tech and startup events in over 65 cities',
+            'title': 'Local startup and tech events in your city | 3cosystem'
         }
     })
 
 
 
 @cache_page(60 * 15)
-def city(request,city):
+def city(request, city):
     try:
         c = City.objects.get(slug=city) 
     except City.DoesNotExist:
         raise Http404
 
-    d        = datetime.utcnow().replace(tzinfo=pytz.utc)
-    today    = datetime.combine(d, datetime.min.time()).replace(tzinfo=pytz.utc)
+    d = datetime.utcnow().replace(tzinfo=pytz.utc)
+    today = datetime.combine(d, datetime.min.time()).replace(tzinfo=pytz.utc)
     end_date = today + timedelta(days=31)
 
-    t = TechEvent.objects.filter(location__distance_lte=(c.location, D(m=c.distance*1000))).filter(is_active=True).filter(begin_time__range=(today,end_date)).order_by('begin_time')
+    t = TechEvent.objects\
+            .filter(location__distance_lte=(c.location, D(m=c.distance*1000)))\
+            .filter(is_active=True)\
+            .filter(meetup_group__is_blacklisted=False)\
+            .filter(begin_time__range=(today, end_date)).order_by('begin_time')
 
     ret = {
-        'city' : c,
-        'days' : reshape_events(t),
-        'meta' : {
-            'description' : "%s has %d tech and startup events scheduled over the next 30 days" % (c.short_name, len(t)),
-            'title'   : "%d upcoming tech and startup events in %s" % (len(t), c.short_name)
+        'city': c,
+        'days': reshape_events(t),
+        'meta': {
+            'description': "%s has %d tech and startup events scheduled over the next 30 days" % (c.short_name, len(t)),
+            'title': "%d upcoming tech and startup events in %s" % (len(t), c.short_name)
         }
     }
 
@@ -73,7 +82,6 @@ def city_ecosystem(request,city):
         c = City.objects.get(slug=city) 
     except City.DoesNotExist:
         raise Http404
-
 
     categories = Category.objects.order_by('-weight').all()
 
