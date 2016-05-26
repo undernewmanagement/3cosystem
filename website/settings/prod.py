@@ -8,10 +8,11 @@ EMAIL_PORT = os.getenv('EMAIL_PORT')
 EMAIL_HOST_USER = os.getenv('EMAIL_USER')
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_PASS')
 EMAIL_USE_TLS = True
+SECRET_KEY = os.getenv('SECRET_KEY')
 
 CACHES = {
     'default': {
-        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
-        'LOCATION': '127.0.0.1:11211',
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'unique-snowflake',
     }
 }

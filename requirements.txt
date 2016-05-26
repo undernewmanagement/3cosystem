@@ -8,3 +8,4 @@ python-memcached==1.53
 pytz==2014.10
 requests==2.5.1
 six==1.9.0
+whitenoise==3.1
