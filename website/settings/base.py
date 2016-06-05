@@ -16,11 +16,8 @@ SECRET_KEY = ')d!*@pc5&i#=dn*8&ljtol*i*o-^j9z@*$63j51y1!pqy=gjx0'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DEV_ENV','dev') == 'dev'
 
-TEMPLATE_DEBUG = False
-TEMPLATE_DIRS = [os.path.join(BASE_DIR, 'templates')]
-
-
 ALLOWED_HOSTS = [
+    'localhost',
     'www.3cosystem.com',
     '3cosystem.com',
     'www.3cosystem.com.',
@@ -38,17 +35,21 @@ INSTALLED_APPS = (
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+    'whitenoise.runserver_nostatic',
     'django.contrib.staticfiles',
     'django.contrib.gis',
     'apps.tech_events',
     'apps.geography',
     'apps.companies',
     'location_field',
+    'website'
 
 )
 
 MIDDLEWARE_CLASSES = (
 #    'website.middleware.WWWRedirectMiddleware',
+
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -99,5 +100,28 @@ STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "static"),
 )
 
-STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+WHITENOISE_ROOT=STATIC_ROOT
 
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [
+            PROJECT_DIR + '/templates'
+        ],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                # Insert your TEMPLATE_CONTEXT_PROCESSORS here or use this
+                # list if you haven't customized them:
+                'django.contrib.auth.context_processors.auth',
+                'django.template.context_processors.debug',
+                'django.template.context_processors.i18n',
+                'django.template.context_processors.media',
+                'django.template.context_processors.static',
+                'django.template.context_processors.tz',
+                'django.contrib.messages.context_processors.messages',
+            ],
+        },
+    },
+]
