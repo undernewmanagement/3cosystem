@@ -24,7 +24,9 @@ ALLOWED_HOSTS = [
     'www.3cosystem.com',
     '3cosystem.com',
     'www.3cosystem.com.',
-    '3cosystem.com.'
+    '3cosystem.com.',
+    '3cosystme.dokku.m3b.net',
+    '3cosystme.dokku.m3b.net.',
 ]
 
 
