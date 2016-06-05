@@ -1,11 +1,11 @@
 BeautifulSoup==3.2.1
-Django==1.7.1
+Django==1.9.7
 django-location-field==1.5.2
-gunicorn==19.4.5
+gunicorn==19.6.0
 icalendar==3.8.4
-psycopg2==2.5.4
+psycopg2==2.6.1
 python-memcached==1.53
 pytz==2014.10
 requests==2.5.1
-six==1.9.0
+six==1.10.0
 whitenoise==3.2
