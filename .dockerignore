@@ -1,0 +1,11 @@
+.env
+env
+
+venv/
+
+Dockerfile
+Dockerfile-dev
+DOKKU_SCALE
+Procfile
+.buildpacks
+.idea/

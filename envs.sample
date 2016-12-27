@@ -1,0 +1,7 @@
+export DB_HOST=db.hostname.com
+export DB_NAME=3cosystem
+export DB_USER=3cosystem
+export DB_PASS=123456
+export DJANGO_SETTINGS_MODULE=website.settings.dev
+export SECRET_KEY='supersecretkeypleasechangeforproduction'
+export DEV_ENV=dev
