@@ -1,11 +1,5 @@
 # INSTALLATION
 
-This process is the same for development and production.
-
-You should provision your production environment using [azure-utils](https://bitbucket.org/unmgmt/azure-utils/) script repo.
-
-**NOTE** you should also provision a development database as well.
-
   1. Provision Postgres database with Postgis Extensions. You can do that 
 using the shell scripts from the azure-utils repo. `pg-create-database-and-user.sh` 
 
@@ -22,3 +16,5 @@ using the shell scripts from the azure-utils repo. `pg-create-database-and-user.
   5. Done
 
 
+## Development
+Use docker-compose to get up and running in development
