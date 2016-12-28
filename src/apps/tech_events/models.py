@@ -1,17 +1,29 @@
 from django.contrib.gis.db import models
-from django.contrib.gis.geos import Point
+#from django.contrib.gis.geos import Point
 
 from location_field.models.spatial import LocationField
 
-from validators import *
+from .validators import *
+
+from django.db.models.signals import pre_save, post_save
+from django.dispatch import receiver
+import requests
+from bs4 import BeautifulSoup
+
+from icalendar import Calendar
+
 
 class MeetupGroup(models.Model):
-    url         = models.CharField(max_length=100,unique=True,validators=[validate_meetup_url_exists])
-    name        = models.CharField(max_length=100)
+
+    url = models.CharField(
+            max_length=100,
+            unique=True,
+            validators=[validate_meetup_url_exists])
+    name = models.CharField(max_length=100)
     is_blacklisted = models.BooleanField(default=False)
-    location    = models.PointField(null=True)
-    objects     = models.GeoManager()
-    
+    location = models.PointField(null=True)
+    objects = models.GeoManager()
+
     class Meta:
         verbose_name_plural = "Meetup Groups"
 
@@ -20,31 +32,40 @@ class MeetupGroup(models.Model):
 
 
 class TechEvent(models.Model):
-    MEETUP     = 'MU'
+
+    MEETUP = 'MU'
     EVENTBRITE = 'EB'
-    ICAL       = 'IC'
-    CUSTOM     = 'CU'
+    ICAL = 'IC'
+    CUSTOM = 'CU'
 
     SOURCE_CHOICES = (
-        ( MEETUP,     'Meetup.com' ),
-        ( EVENTBRITE, 'EventBrite'),
-        ( ICAL,       '.ics calendar'),
-        ( CUSTOM,     'Custom one-off event'),
+        (MEETUP, 'Meetup.com'),
+        (EVENTBRITE, 'EventBrite'),
+        (ICAL, '.ics calendar'),
+        (CUSTOM, 'Custom one-off event'),
     )
 
-    uniqid      = models.CharField(max_length=50,unique=True)
-    name        = models.CharField(max_length=255)
-    url         = models.URLField()
-    begin_time  = models.DateTimeField('begin time')
-    source      = models.CharField(max_length=2, choices=SOURCE_CHOICES, default=CUSTOM)
-    meetup_group = models.ForeignKey(MeetupGroup,null=True, blank=True)
-    is_active   = models.BooleanField(default=True)
-    address     = models.CharField(max_length=255)
-    city        = models.CharField(max_length=100,null=True)
-    postal_code = models.CharField(max_length=20,null=True)
-    country     = models.CharField(max_length=50,null=True)
-    location    = LocationField(based_fields=[address,city,postal_code], zoom=7, default='POINT (0.0 0.0)')
-    objects     = models.GeoManager()
+    uniqid = models.CharField(max_length=50, unique=True)
+    name = models.CharField(max_length=255)
+    url = models.URLField()
+    begin_time = models.DateTimeField('begin time')
+    source = models.CharField(max_length=2,
+                              choices=SOURCE_CHOICES,
+                              default=CUSTOM)
+    meetup_group = models.ForeignKey(MeetupGroup,
+                                     null=True,
+                                     blank=True)
+    is_active = models.BooleanField(default=True)
+    address = models.CharField(max_length=255)
+    city = models.CharField(max_length=100, null=True)
+    postal_code = models.CharField(max_length=20, null=True)
+    country = models.CharField(max_length=50, null=True)
+    location = LocationField(
+                    based_fields=[address, city, postal_code],
+                    zoom=7,
+                    default='POINT (0.0 0.0)'
+                )
+    objects = models.GeoManager()
 
     class Meta:
         verbose_name_plural = "Events"
@@ -54,10 +75,11 @@ class TechEvent(models.Model):
 
 
 class ParseError(models.Model):
-    created_at    = models.DateField()
+
+    created_at = models.DateField()
     error_message = models.TextField()
-    payload       = models.TextField()
-    is_resolved   = models.BooleanField(default=False)
+    payload = models.TextField()
+    is_resolved = models.BooleanField(default=False)
 
     class Meta:
         verbose_name_plural = 'Firehose Parse Errors'
@@ -66,18 +88,9 @@ class ParseError(models.Model):
         return self.error_message
 
 
-import sys
-reload(sys)
-sys.setdefaultencoding("utf-8")
-from django.db.models.signals import pre_save, post_save
-from django.dispatch import receiver
-import requests
-from BeautifulSoup import BeautifulSoup
-from icalendar import Calendar
-
-
-
-
+#import sys
+#reload(sys)
+#sys.setdefaultencoding("utf-8")
 @receiver(pre_save, sender=MeetupGroup)
 def meetup_group_pre_save(sender, instance, **kwargs):
 
@@ -86,15 +99,14 @@ def meetup_group_pre_save(sender, instance, **kwargs):
             'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.71 Safari/537.36',
         }
 
-        url       = 'http://www.meetup.com/%s' % instance.url
-        r         = requests.get(url,headers=headers)
-        html      = BeautifulSoup(r.text)
-        (lat,lng) = html.findAll('meta',attrs={"name":"geo.position"})[0]['content'].split(';')
-        instance.name      = html.h1.span.text
-        instance.location  = 'POINT(%s %s)' % (lng,lat)
-
-
-
+        url = 'http://www.meetup.com/%s' % instance.url
+        r = requests.get(url, headers=headers)
+        html = BeautifulSoup(r.text)
+        (lat, lng) = html.findAll(
+                'meta',
+                attrs={"name": "geo.position"})[0]['content'].split(';')
+        instance.name = html.h1.span.text
+        instance.location = 'POINT(%s %s)' % (lng, lat)
 
 
 @receiver(post_save, sender=MeetupGroup)
@@ -113,28 +125,30 @@ def meetup_group_post_save(sender, instance, **kwargs):
         }
         group_calendar_url = 'http://www.meetup.com/%s/events/ical/' % instance.url
 
-        r = requests.get(group_calendar_url,headers=headers)
+        r = requests.get(group_calendar_url, headers=headers)
         c = Calendar.from_ical(r.text)
 
         for i in c.walk():
-            if i.name=='VEVENT':
+            if i.name == 'VEVENT':
 
-                uniqid    = i['UID'].replace('event_','').replace('@meetup.com','')
-                (lat,lng) = i['GEO'].to_ical().split(';')
+                uniqid = i['UID'].replace('event_', '').\
+                         replace('@meetup.com', '')
+                (lat, lng) = i['GEO'].to_ical().split(';')
 
                 updated_values = {
-                    'begin_time'      : i.get('DTSTART').dt,
-                    'url'             : i['URL'],
-                    'name'            : i['SUMMARY'],
-                    'source'          : 'MU',
-                    'meetup_group_id' : instance.id,
-                    'is_active'       : True,
-                    'address'         : i.get('LOCATION','See event page for details'),
-                    'city'            : '',
-                    'postal_code'     : '',
-                    'country'         : '',
-                    'location'        : 'POINT (%s %s)' % (lng,lat)
+                    'begin_time': i.get('DTSTART').dt,
+                    'url': i['URL'],
+                    'name': i['SUMMARY'],
+                    'source': 'MU',
+                    'meetup_group_id': instance.id,
+                    'is_active': True,
+                    'address': i.get('LOCATION', 'See event page for details'),
+                    'city': '',
+                    'postal_code': '',
+                    'country': '',
+                    'location': 'POINT (%s %s)' % (lng, lat)
                 }
 
-                t = TechEvent.objects.update_or_create(uniqid=uniqid, defaults=updated_values)
-
+                TechEvent.objects.update_or_create(
+                        uniqid=uniqid,
+                        defaults=updated_values)

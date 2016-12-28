@@ -1,4 +1,3 @@
-#!/bin/sh
 python /app/manage.py collectstatic --noinput
 
 # depending on the environment, (dev is default)
@@ -15,6 +14,6 @@ case "$DEV_ENV" in
     *)
         # output logs to /logs folder
         python /app/manage.py migrate
-        python /app/manage.py runserver_plus 0.0.0.0:8000
+        python /app/manage.py runserver 0.0.0.0:8000
 
 esac

@@ -1,6 +1,4 @@
-from base import *
-
-
+from .base import *
 
 CACHES = {
     'default': {

@@ -8,10 +8,14 @@ services:
             context: .
             dockerfile: Dockerfile
 
-        env_file: env
+        command: /start-server.sh
+        env_file: envs
+        volumes:
+            - "./src:/app"
 
         ports:
             - "5000:5000"
+            - "8000:8000"
         depends_on:
             - postgres
             - redis
