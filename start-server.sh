@@ -14,6 +14,6 @@ case "$DEV_ENV" in
     *)
         # output logs to /logs folder
         python /app/manage.py migrate
-        python /app/manage.py runserver 0.0.0.0:8000
+        python /app/manage.py runserver 0.0.0.0:5000
 
 esac
