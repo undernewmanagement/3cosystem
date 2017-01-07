@@ -1,8 +1,7 @@
-# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
 BASE_DIR = os.path.dirname(os.path.dirname(__file__)) + '/../'
 
-PROJECT_DIR=BASE_DIR
+PROJECT_DIR = BASE_DIR
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 STATIC_ROOT = os.path.join(PROJECT_DIR, 'staticfiles')
 
@@ -14,7 +13,7 @@ STATIC_ROOT = os.path.join(PROJECT_DIR, 'staticfiles')
 SECRET_KEY = ')d!*@pc5&i#=dn*8&ljtol*i*o-^j9z@*$63j51y1!pqy=gjx0'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv('DEV_ENV','dev') == 'dev'
+DEBUG = os.getenv('DEV_ENV', 'dev') == 'dev'
 
 ALLOWED_HOSTS = [
     'localhost',
@@ -47,7 +46,7 @@ INSTALLED_APPS = (
 )
 
 MIDDLEWARE_CLASSES = (
-#    'website.middleware.WWWRedirectMiddleware',
+    # 'website.middleware.WWWRedirectMiddleware',
 
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -69,11 +68,11 @@ WSGI_APPLICATION = 'website.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE'   : 'django.contrib.gis.db.backends.postgis',
-        'NAME'     : os.getenv('DB_NAME'),
-        'USER'     : os.getenv('DB_USER'),
-        'PASSWORD' : os.getenv('DB_PASS'),
-        'HOST'     : os.getenv('DB_HOST')
+        'ENGINE': 'django.contrib.gis.db.backends.postgis',
+        'NAME': os.getenv('DB_NAME'),
+        'USER': os.getenv('DB_USER'),
+        'PASSWORD': os.getenv('DB_PASS'),
+        'HOST': os.getenv('DB_HOST')
     }
 }
 
@@ -101,7 +100,7 @@ STATICFILES_DIRS = (
 )
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-WHITENOISE_ROOT=STATIC_ROOT
+WHITENOISE_ROOT = STATIC_ROOT
 
 TEMPLATES = [
     {
