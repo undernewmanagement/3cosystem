@@ -1,25 +1,10 @@
-"""
-Django settings for website project.
-
-For more information on this file, see
-https://docs.djangoproject.com/en/1.7/topics/settings/
-
-For the full list of settings and their values, see
-https://docs.djangoproject.com/en/1.7/ref/settings/
-"""
-
-# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
+
+
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/1.7/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = ')d!*@pc5&i#=dn*8&ljtol*i*o-^j9z@*$63j51y1!pqy=gjx0'
 
-# SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 TEMPLATE_DEBUG = True
@@ -66,11 +51,11 @@ WSGI_APPLICATION = 'website.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE'   : 'django.contrib.gis.db.backends.postgis',
-        'NAME'     : '3cosystem_django',
-        'USER'     : 'sherazsharif',
-        'PASSWORD' : 'abc123',
-        'HOST'     : 'localhost',
+        'ENGINE': 'django.contrib.gis.db.backends.postgis',
+        'NAME': '3cosystem_django',
+        'USER': 'sherazsharif',
+        'PASSWORD': 'abc123',
+        'HOST': 'localhost',
     }
 }
 

@@ -15,32 +15,32 @@ from django.views.decorators.cache import cache_page
 @cache_page(60 * 15)
 def home(request):
     countries = Country.objects.filter(is_active=True).order_by('name')
-    d        = datetime.utcnow().replace(tzinfo=pytz.utc)
-    today    = datetime.combine(d, datetime.min.time()).replace(tzinfo=pytz.utc)
+    d = datetime.utcnow().replace(tzinfo=pytz.utc)
+    today = datetime.combine(d, datetime.min.time()).replace(tzinfo=pytz.utc)
     end_date = today + timedelta(days=31)
 
     ret = []
     for country in countries:
         carr = {
-            'country' : country.name,
-            'cities'  : [],
+            'country': country.name,
+            'cities': [],
         }
         for city in country.cities.filter(is_active=True).all():
             t = TechEvent.objects\
                     .filter(location__distance_lte=(city.location, D(m=city.distance*1000)))\
                     .filter(is_active=True)\
                     .filter(meetup_group__is_blacklisted=False)\
-                    .filter(begin_time__range=(today,end_date))\
+                    .filter(begin_time__range=(today, end_date))\
                     .order_by('begin_time').count()
             carr['cities'].append({
-                'name' : city.short_name,
-                'slug' : city.slug,
+                'name': city.short_name,
+                'slug': city.slug,
                 'count': t
             })
         ret.append(carr)
 
-    return render(request,'website/home.html',{
-        'countries' : ret,
+    return render(request, 'website/home.html', {
+        'countries': ret,
         'meta': {
             'description': 'We have the biggest, baddest list of local tech and startup events in over 65 cities',
             'title': 'Local startup and tech events in your city | 3cosystem'
@@ -48,9 +48,9 @@ def home(request):
     })
 
 
-
 @cache_page(60 * 15)
 def city(request, city):
+
     try:
         c = City.objects.get(slug=city) 
     except City.DoesNotExist:
@@ -75,9 +75,11 @@ def city(request, city):
         }
     }
 
-    return render(request,'website/events.html', ret)
+    return render(request, 'website/events.html', ret)
 
-def city_ecosystem(request,city):
+
+def city_ecosystem(request, city):
+
     try:
         c = City.objects.get(slug=city) 
     except City.DoesNotExist:
@@ -88,26 +90,25 @@ def city_ecosystem(request,city):
     grid = []
     for category in categories:
         block = {
-            'name' : category.name,
-            'idea'    : Company.objects.filter(cities=c).filter(stages__name='Idea').filter(categories=category).all(),
-            'startup' : Company.objects.filter(cities=c).filter(stages__name='Startup').filter(categories=category).all(),
-            'growth'  : Company.objects.filter(cities=c).filter(stages__name='Growth').filter(categories=category).all() 
+            'name': category.name,
+            'idea': Company.objects.filter(cities=c).filter(stages__name='Idea').filter(categories=category).all(),
+            'startup': Company.objects.filter(cities=c).filter(stages__name='Startup').filter(categories=category).all(),
+            'growth': Company.objects.filter(cities=c).filter(stages__name='Growth').filter(categories=category).all()
         }
         grid.append(block)
         
     ret = {
-        'city' : c,
-        'grid' : grid,
-        'meta' : {
-            'description' : "description here %s" % (c.short_name),
-            'title'   : "Discover the tech and startup ecosystem in %s" % (c.short_name)
+        'city': c,
+        'grid': grid,
+        'meta': {
+            'description': "description here %s" % c.short_name,
+            'title': "Discover the tech and startup ecosystem in %s" % c.short_name
         }
     }
-    return render(request,'website/ecosystem.html', ret)
-
+    return render(request, 'website/ecosystem.html', ret)
 
 
 def sitemap(request):
     cities = City.objects.filter(is_active=True).all()
-    return render(request, 'sitemap.xml', { 'cities' : cities})
+    return render(request, 'sitemap.xml', {'cities': cities})
 

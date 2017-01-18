@@ -1,10 +1,6 @@
 from django.contrib.gis.db import models
-#from django.contrib.gis.geos import Point
-
 from location_field.models.spatial import LocationField
-
 from .validators import *
-
 from django.db.models.signals import pre_save, post_save
 from django.dispatch import receiver
 import requests
@@ -88,9 +84,6 @@ class ParseError(models.Model):
         return self.error_message
 
 
-#import sys
-#reload(sys)
-#sys.setdefaultencoding("utf-8")
 @receiver(pre_save, sender=MeetupGroup)
 def meetup_group_pre_save(sender, instance, **kwargs):
 
@@ -111,10 +104,10 @@ def meetup_group_pre_save(sender, instance, **kwargs):
 
 @receiver(post_save, sender=MeetupGroup)
 def meetup_group_post_save(sender, instance, **kwargs):
-    '''
+    """
     This signal will download the current calendar for meetup groups
     just added using the admin.
-    '''
+    """
 
     if instance.is_blacklisted is True:
         TechEvent.objects.filter(meetup_group_id=instance.id).delete()
