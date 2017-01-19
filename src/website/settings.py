@@ -5,14 +5,7 @@ PROJECT_DIR = BASE_DIR
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 STATIC_ROOT = os.path.join(PROJECT_DIR, 'staticfiles')
 
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/1.7/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = ')d!*@pc5&i#=dn*8&ljtol*i*o-^j9z@*$63j51y1!pqy=gjx0'
-
-# SECURITY WARNING: don't run with debug turned on in production!
+SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
 DEBUG = os.getenv('DEV_ENV', 'dev') == 'dev'
 
 ALLOWED_HOSTS = [
@@ -42,12 +35,9 @@ INSTALLED_APPS = (
     'apps.companies',
     'location_field',
     'website'
-
 )
 
 MIDDLEWARE_CLASSES = (
-    # 'website.middleware.WWWRedirectMiddleware',
-
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -63,9 +53,7 @@ ROOT_URLCONF = 'website.urls'
 WSGI_APPLICATION = 'website.wsgi.application'
 
 
-# Database
-# https://docs.djangoproject.com/en/1.7/ref/settings/#databases
-
+# Database Configuration
 DATABASES = {
     'default': {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
@@ -124,3 +112,23 @@ TEMPLATES = [
         },
     },
 ]
+
+# Email configuration
+ADMINS = [('Mark', 'mark@m3b.net'), ]
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+SERVER_EMAIL = os.getenv('SERVER_EMAIL')
+EMAIL_HOST = os.getenv('EMAIL_HOST')
+EMAIL_PORT = os.getenv('EMAIL_PORT')
+EMAIL_HOST_USER = os.getenv('EMAIL_USER')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_PASS')
+EMAIL_USE_TLS = True
+
+
+# Cache configuration
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'unique-snowflake',
+    }
+}
