@@ -17,6 +17,7 @@ class TechEventAdmin(admin.ModelAdmin):
     search_fields = ['url', 'name']
     list_filter = ('is_active',)
     actions = [make_inactive]
+    list_display = ('name',)
 
 admin.site.register(MeetupGroup, MeetupGroupAdmin)
 admin.site.register(TechEvent, TechEventAdmin)
