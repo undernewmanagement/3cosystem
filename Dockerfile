@@ -16,6 +16,7 @@ RUN chown -R django /app
 
 COPY ./start-server.sh /start-server.sh
 COPY ./entrypoint.sh /entrypoint.sh
+COPY ./Procfile /app
 RUN chmod +x /*.sh
 
 WORKDIR /app
