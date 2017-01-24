@@ -5,14 +5,13 @@ case "$DEV_ENV" in
 
     prod)
         # logs are output to stdout so other logging tools can pick them up
-        /usr/local/bin/gunicorn config.wsgi -w 4 -b 0.0.0.0:5000 --chdir=/app
+        /usr/local/bin/gunicorn website.wsgi -w 4 -b 0.0.0.0:5000 --chdir=/app
         ;;
 
     test)
-        /usr/local/bin/gunicorn config.wsgi -w 4 -b 0.0.0.0:5000 --chdir=/app
+        /usr/local/bin/gunicorn website.wsgi -w 4 -b 0.0.0.0:5000 --chdir=/app
         ;;
     *)
-        # output logs to /logs folder
         /app/manage.py migrate
         /app/manage.py runserver 0.0.0.0:5000
 
