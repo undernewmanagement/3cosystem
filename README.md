@@ -1,20 +1,47 @@
-# INSTALLATION
+# Whoa there!
+    
+If you are interested on hacking on this and contributing to this project, then stick around. These docs are for you.
 
-  1. Provision Postgres database with Postgis Extensions. You can do that 
-using the shell scripts from the azure-utils repo. `pg-create-database-and-user.sh` 
+However, if you are only interested in standing up your own 3cosystem service, then please head on up to the
+flight-deck:
 
-  2. Setup you local environment variables. 
-```
-  - DB_HOST='example.com'
-  - DB_NAME='dbname'
-  - DB_USER='dbuser'
-  - DB_PASS='dbpass'
-  - DJANGO_SETTINGS_MODULE='website.settings.dev'  or 'website.settings.prod'
-```
-  3. run `manage.py migrate`
-  4. run `manage.py loaddata fixtures/geography.json` (this will load countries, cities, and their long, lat)
-  5. Done
+  - https://github.com/3cosystem/flight-deck. 
+  
+That is the meta-repo with all the sexy task-runners and glue that gets this whole damn thing off the ground.
 
+Still here? Then let's dig in!
 
-## Development
-Use docker-compose to get up and running in development
+# Development
+We live in a Docker world, and I'm a Docker girl. That means the preferred way to develop, test, and deploy
+ is using Docker.
+
+That said, you should still be using flight-deck to stand up the entire stack. 
+
+## Required environment variables
+Configuration is done through environment variables:
+
+  - `DJANGO_SECRET_KEY`: A secret key for a particular Django installation. 
+  This is used to provide cryptographic signing, and should be set to a unique, unpredictable value. 
+  - `DJANGO_LOG_LEVEL`: Set the logging verbosity (DEBUG, INFO, WARNING, ERROR, CRITICAL)
+  - `DB_HOST`: Database hostname
+  - `DB_NAME`: Database name
+  - `DB_USER`: Database username
+  - `DB_PASS`: Database user password
+  - `SERVER_EMAIL`: The email address that emails are sent from (user@host.com)
+
+  - `EMAIL_HOST`: Domain name or IP address of your smtp server
+  - `EMAIL_PORT`: SMTP server port
+  - `EMAIL_USER`: SMTP server user
+  - `EMAIL_PASS`: SMTP user password
+
+  - `DEV_ENV`: the development environment you are in. Defaults to 'dev' if no value is given. 
+
+  - `PYTHONUNBUFFERED`: Default `1`. Set this to keep python from buffering console output
+
+## Run database migrations
+There is a `Makefile` task-runner to help you run database migrations and load fixtures.  
+
+  - `make migrate` will run Django `manage.py makemigrations && manage.py migrate`
+  - `make fixtures` will run Django load fixtures into a newly provisioned database
+  
+`manage.py loaddata fixtures/geography.json` (this will load countries, cities, and their long, lat)  
