@@ -8,15 +8,7 @@ STATIC_ROOT = os.path.join(PROJECT_DIR, 'staticfiles')
 SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
 DEBUG = os.getenv('DEV_ENV', 'dev') == 'dev'
 
-ALLOWED_HOSTS = [
-    'localhost',
-    'www.3cosystem.com',
-    '3cosystem.com',
-    'www.3cosystem.com.',
-    '3cosystem.com.',
-    '3cosystme.dokku.m3b.net',
-    '3cosystme.dokku.m3b.net.',
-]
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS').split(',')
 
 
 # Application definition
