@@ -92,23 +92,25 @@ def meetup_group_pre_save(sender, instance, **kwargs):
             'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.71 Safari/537.36',
         }
 
-        url = 'http://www.meetup.com/%s' % instance.url
+        url = 'https://www.meetup.com/%s' % instance.url
         r = requests.get(url, headers=headers)
         html = BeautifulSoup(r.text)
         (lat, lng) = html.findAll(
                 'meta',
                 attrs={"name": "geo.position"})[0]['content'].split(';')
-        instance.name = html.h1.span.text
+        instance.name = html.h1.span.text[:255]
         instance.location = 'POINT(%s %s)' % (lng, lat)
 
 
 @receiver(post_save, sender=MeetupGroup)
 def meetup_group_post_save(sender, instance, **kwargs):
     """
-    This signal will download the current calendar for meetup groups
-    just added using the admin.
+    Download the current calendar for meetup groups just added using the
+    admin.
     """
 
+    # If the meetup group is blacklisted, then we should delete all related
+    # tech events.
     if instance.is_blacklisted is True:
         TechEvent.objects.filter(meetup_group_id=instance.id).delete()
 
@@ -130,12 +132,12 @@ def meetup_group_post_save(sender, instance, **kwargs):
 
                 updated_values = {
                     'begin_time': i.get('DTSTART').dt,
-                    'url': i['URL'],
+                    'url': i['URL'][:200],
                     'name': i['SUMMARY'],
                     'source': 'MU',
                     'meetup_group_id': instance.id,
                     'is_active': True,
-                    'address': i.get('LOCATION', 'See event page for details'),
+                    'address': i.get('LOCATION', 'See event page for details')[:255],
                     'city': '',
                     'postal_code': '',
                     'country': '',
