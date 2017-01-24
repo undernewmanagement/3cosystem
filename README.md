@@ -23,6 +23,9 @@ Configuration is done through environment variables:
   - `DJANGO_SECRET_KEY`: A secret key for a particular Django installation. 
   This is used to provide cryptographic signing, and should be set to a unique, unpredictable value. 
   - `DJANGO_LOG_LEVEL`: Set the logging verbosity (DEBUG, INFO, WARNING, ERROR, CRITICAL)
+  
+  - `ALLOWED_HOSTS`: CSV line of allowed hosts. ip addresses or hostnames (eg  - "192.168.99.100,localhost,bob.com")
+  
   - `DB_HOST`: Database hostname
   - `DB_NAME`: Database name
   - `DB_USER`: Database username
@@ -41,7 +44,6 @@ Configuration is done through environment variables:
 ## Run database migrations
 There is a `Makefile` task-runner to help you run database migrations and load fixtures.  
 
-  - `make migrate` will run Django `manage.py makemigrations && manage.py migrate`
+  - `make migrate` will run Django `manage.py makemigrations && manage.py migrate` (this will load countries, cities, and their long, lat)
   - `make fixtures` will run Django load fixtures into a newly provisioned database
-  
-`manage.py loaddata fixtures/geography.json` (this will load countries, cities, and their long, lat)  
+ 
