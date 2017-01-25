@@ -20,26 +20,24 @@ That said, you should still be using flight-deck to stand up the entire stack.
 ## Required environment variables
 Configuration is done through environment variables:
 
-  - `DJANGO_SECRET_KEY`: A secret key for a particular Django installation. 
-  This is used to provide cryptographic signing, and should be set to a unique, unpredictable value. 
-  - `DJANGO_LOG_LEVEL`: Set the logging verbosity (DEBUG, INFO, WARNING, ERROR, CRITICAL)
-  
-  - `ALLOWED_HOSTS`: CSV line of allowed hosts. ip addresses or hostnames (eg  - "192.168.99.100,localhost,bob.com")
-  
-  - `DB_HOST`: Database hostname
-  - `DB_NAME`: Database name
-  - `DB_USER`: Database username
-  - `DB_PASS`: Database user password
-  - `SERVER_EMAIL`: The email address that emails are sent from (user@host.com)
-
-  - `EMAIL_HOST`: Domain name or IP address of your smtp server
-  - `EMAIL_PORT`: SMTP server port
-  - `EMAIL_USER`: SMTP server user
-  - `EMAIL_PASS`: SMTP user password
-
-  - `DEV_ENV`: the development environment you are in. Defaults to 'dev' if no value is given. 
-
-  - `PYTHONUNBUFFERED`: Default `1`. Set this to keep python from buffering console output
+| Key | Description |
+| --- | ----------- |
+| `DJANGO_SECRET_KEY`| A secret key for a particular Django installation. This is used to provide cryptographic signing, and should be set to a unique, unpredictable value.| 
+| `DJANGO_LOG_LEVEL`| Set the logging verbosity (DEBUG, INFO, WARNING, ERROR, CRITICAL) |
+| `ALLOWED_HOSTS`| CSV line of allowed hosts. ip addresses or hostnames (eg  - "192.168.99.100,localhost,bob.com") |
+| `DB_HOST` | Database hostname |
+| `DB_NAME` | Database name |
+| `DB_USER` | Database username |
+| `DB_PASS` | Database user password |
+| `SERVER_EMAIL` | The email address that emails are sent from (user@host.com) |
+| `EMAIL_HOST` | Domain name or IP address of your smtp server |
+| `EMAIL_PORT` | SMTP server port |
+| `EMAIL_USER` | SMTP server user |
+| `EMAIL_PASS` | SMTP user password |
+| `DEV_ENV` | the development environment you are in. Defaults to 'dev' if no value is given.| 
+| `PYTHONUNBUFFERED` | Default `1`. Set this to keep python from buffering console output|
+| `GOOGLE_ANALYTICS` | UA-********* Key for google analytics|
+| `SITE_VERSION` | The software version of the website. Note, this is set in the docker image when it is built. Check the Dockerfile |
 
 ## Run database migrations
 There is a `Makefile` task-runner to help you run database migrations and load fixtures.  

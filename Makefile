@@ -1,14 +1,14 @@
 
 DOCKER_RUN := docker run -it --rm -v $$PWD:/usr/src/app 3cosystem/website
 DC := docker-compose run --rm website
-
+SITE_VERSION := 1.0.0
 
 .PHONY: check-env
 check-env:
 
 .PHONY: build
 build:
-	docker build -t 3cosystem/website .
+	docker build --build-arg SITE_VERSION=$(SITE_VERSION) -t 3cosystem/website:$(SITE_VERSION) .
 
 .PHONY: run
 run:
@@ -27,7 +27,9 @@ migrate:
 fixtures:
 
 
+#.PHONY: ship
 #ship:
+#	docker
 
 .PHONY: clean
 clean:

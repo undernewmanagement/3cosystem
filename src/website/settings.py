@@ -9,7 +9,9 @@ SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
 DEBUG = os.getenv('DEV_ENV', 'dev') == 'dev'
 
 ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS').split(',')
+SITE_VERSION = os.getenv('SITE_VERSION')
 
+GOOGLE_ANALYTICS = os.getenv('GOOGLE_ANALYTICS')
 
 # Application definition
 
@@ -100,6 +102,7 @@ TEMPLATES = [
                 'django.template.context_processors.static',
                 'django.template.context_processors.tz',
                 'django.contrib.messages.context_processors.messages',
+                'website.context_processors.global_settings'
             ],
         },
     },
