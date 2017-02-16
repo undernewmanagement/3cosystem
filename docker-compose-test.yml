@@ -3,9 +3,7 @@ version: '2'
 services:
 
     website:
-        build:
-            context: .
-            dockerfile: Dockerfile
+        image: 3cosystem/website
         env_file: env.test
         ports:
             - "5000:5000"

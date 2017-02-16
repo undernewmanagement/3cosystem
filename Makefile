@@ -35,7 +35,7 @@ logs:
 
 .PHONY: test
 test:
-	$(DC) pytest
+	$(DC) run --rm --no-deps website pytest
 
 
 .PHONY: migrate
@@ -59,10 +59,6 @@ clean:
 	rm *.pyc
 	rm -rf __pycache__/
 
-.PHONY: run-test
-run-test:
-	docker-compose -p 3test -f docker-compose-test.yml up -d
-
 
 ##### CI/CD Server commands
 
@@ -72,7 +68,8 @@ ci-build: build
 
 .PHONY: ci-test
 ci-test: ci-build
-	$(DC) pytest
+	docker-compose -p 3cosystem_test -f docker-compose-test.yml run --rm website /app/manage.py test
+	docker-compose -p 3cosystem_test -f docker-compose-test.yml down
 
 
 .PHONY: ci-push
