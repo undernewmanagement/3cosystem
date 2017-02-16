@@ -1,0 +1,17 @@
+version: '2'
+
+services:
+
+    website:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        env_file: env.test
+        ports:
+            - "5000:5000"
+        depends_on:
+            - postgres
+
+    postgres:
+        image: mdillon/postgis
+        env_file: env.test

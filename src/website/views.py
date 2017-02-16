@@ -50,7 +50,15 @@ def home(request):
 
 @cache_page(60 * 15)
 def city(request, city):
+    """
+    View all the events for a city. Results are cached for 15 minutes
+    Args:
+        request: django request object
+        city: the name of the city (slug)
 
+    Returns:
+
+    """
     try:
         c = City.objects.get(slug=city) 
     except City.DoesNotExist:

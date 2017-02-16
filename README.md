@@ -36,12 +36,18 @@ Configuration is done through environment variables:
 | `EMAIL_PASS` | SMTP user password |
 | `DEV_ENV` | the development environment you are in. Defaults to 'dev' if no value is given.| 
 | `PYTHONUNBUFFERED` | Default `1`. Set this to keep python from buffering console output|
-| `GOOGLE_ANALYTICS` | UA-********* Key for google analytics|
-| `SITE_VERSION` | The software version of the website. Note, this is set in the docker image when it is built. Check the Dockerfile |
+| `GOOGLE_ANALYTICS` | UA-\*\*\*\*\*\*\*\*\* Key for google analytics|
+| `SITE_VERSION` | The software version of the website. Note, this is set in the docker image when it is built. DO NOT SET THIS VARIABLE WHEN YOU START THE CONTAINER! Check the Dockerfile |
 
-## Run database migrations
+## Various django commands
 There is a `Makefile` task-runner to help you run database migrations and load fixtures.  
 
   - `make migrate` will run Django `manage.py makemigrations && manage.py migrate` (this will load countries, cities, and their long, lat)
   - `make fixtures` will run Django load fixtures into a newly provisioned database
- 
+  - `make cachetable` will have Django create the cache table in postgres for view caching.
+
+## Building the docker image
+Take note that when updating the docker image you must update the SITE_VERSION variables in the top of the makefile.
+This is, admidettly, not the most ideal way to track versions, but that will have to wait I guess.
+
+We don't have a clever way yet of this piece of build automation. JUST. BE. CAREFUL.

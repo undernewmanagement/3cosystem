@@ -9,10 +9,13 @@ case "$DEV_ENV" in
         ;;
 
     test)
+        /app/manage.py migrate
+        /app/manage.py createcachetable
         /usr/local/bin/gunicorn website.wsgi -w 4 -b 0.0.0.0:5000 --chdir=/app
         ;;
     *)
         /app/manage.py migrate
+        /app/manage.py createcachetable
         /app/manage.py runserver 0.0.0.0:5000
 
 esac

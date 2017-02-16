@@ -1,0 +1,17 @@
+version: '2'
+
+services:
+
+    website:
+        image: 3cosystem/website
+        env_file: env
+        volumes:
+            - "./src:/app"
+        ports:
+            - "5000:5000"
+#        depends_on:
+#            - postgres
+
+#    postgres:
+#        image: mdillon/postgis
+#        env_file: env
