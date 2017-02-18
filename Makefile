@@ -73,7 +73,7 @@ ci-test: ci-build
 
 
 .PHONY: ci-push
-push: ci-build
+ci-push: ci-build
 	$(eval IMAGE_ID := $(shell docker images -q $(IMAGE_NAME) | tail -n1))
 	docker tag $(IMAGE_ID) $(IMAGE_NAME):latest
 	docker tag $(IMAGE_ID) $(IMAGE_NAME):$(SITE_VERSION)
