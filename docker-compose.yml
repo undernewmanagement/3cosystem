@@ -3,7 +3,7 @@ version: '2'
 services:
 
     website:
-        image: 3cosystem/website
+        image: 3cosystem/website:latest
         env_file: env
         volumes:
             - "./src:/app"

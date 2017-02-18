@@ -27,4 +27,4 @@ RUN chmod +x /*.sh
 EXPOSE 5000
 
 ENTRYPOINT ["/entrypoint.sh"]
-CMD ["/start-server.sh"]
+CMD ["/bin/bash", "/start-server.sh"]
