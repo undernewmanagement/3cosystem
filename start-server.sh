@@ -1,3 +1,5 @@
+echo "Running start-server.sh..."
+
 python /app/manage.py collectstatic --noinput
 
 # depending on the environment, (dev is default)
