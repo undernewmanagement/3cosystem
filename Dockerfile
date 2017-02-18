@@ -4,6 +4,9 @@ FROM python:3
 ARG SITE_VERSION
 ENV SITE_VERSION=$SITE_VERSION
 
+ARG PORT=5000
+ENV PORT=$PORT
+
 # Install binutils so that geodjango works
 RUN apt-get update \
     && apt-get install -y binutils libproj-dev gdal-bin
@@ -24,7 +27,7 @@ COPY entrypoint.sh /entrypoint.sh
 COPY Procfile /app
 RUN chmod +x /*.sh
 
-EXPOSE 5000
+EXPOSE $PORT
 
 ENTRYPOINT ["/entrypoint.sh"]
 CMD ["/bin/bash", "/start-server.sh"]

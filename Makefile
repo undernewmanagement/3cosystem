@@ -8,7 +8,7 @@ DC := docker-compose -p 3cosystem
 
 .PHONY: boom
 boom:
-	echo $(SITE_VERSION)
+	docker run --rm -it --env-file=env $(IMAGE_NAME)
 
 .PHONY: build
 build:
