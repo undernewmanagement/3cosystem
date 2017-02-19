@@ -12,7 +12,7 @@ build:
 
 .PHONY: run
 run:
-	$(DOCKER_RUN)
+	$(DOCKER_RUN) $(CMD)
 
 .PHONY: test
 test:
