@@ -2,7 +2,7 @@ IMAGE_NAME := 3cosystem/website
 
 SITE_VERSION := $(shell semver.sh bump patch)
 
-DOCKER_RUN := docker run -it --rm -v $$PWD:/usr/src/app --env-file=env 3cosystem/website
+DOCKER_RUN := docker run -it --rm -p 5000:5000 -v $$PWD:/usr/src/app --env-file=env 3cosystem/website
 
 
 .PHONY: build
