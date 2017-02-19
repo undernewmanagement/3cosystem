@@ -62,4 +62,4 @@ ci-push: ci-build
 	docker login -u $(DOCKER_USER) -p $(DOCKER_PASS)
 	docker push $(IMAGE_NAME)
 	git tag $(SITE_VERSION)
-	git push github $(SITE_VERSION)
+	git push origin $(SITE_VERSION)
