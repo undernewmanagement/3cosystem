@@ -2,13 +2,8 @@ IMAGE_NAME := 3cosystem/website
 
 SITE_VERSION := $(shell semver.sh bump patch)
 
-DOCKER_RUN := docker run -it --rm -v $$PWD:/usr/src/app 3cosystem/website
+DOCKER_RUN := docker run -it --rm -v $$PWD:/usr/src/app --env-file=env 3cosystem/website
 
-DC := docker-compose -p 3cosystem 
-
-.PHONY: boom
-boom:
-	docker run --rm -it --env-file=env $(IMAGE_NAME)
 
 .PHONY: build
 build:
@@ -17,47 +12,34 @@ build:
 
 .PHONY: run
 run:
-	$(DC) run --rm --no-deps website $(CMD)
-
-
-.PHONY: start
-start:
-	$(DC) up -d
-
-
-.PHONY: stop
-stop:
-	$(DC) down
-
-.PHONY: logs
-logs:
-	$(DC) logs -f $(SERVICE)
+	$(DOCKER_RUN)
 
 .PHONY: test
 test:
-	$(DC) run --rm --no-deps website pytest
+	$(DOCKER_RUN) /app/manage.py test
 
 
 .PHONY: migrate
 migrate:
-	$(DC) ./manage.py makemigrations
-	$(DC) ./manage.py migrate
+	$(DOCKER_RUN) ./manage.py makemigrations
+	$(DOCKER_RUN) ./manage.py migrate
 
 
 .PHONY: cachetable
 cachetable:
-	$(DC) ./manage.py createcachetable
+	$(DOCKER_RUN) ./manage.py createcachetable
 
 
-.PHONY: fixtures
-fixtures:
-	$(DC) ./manage.py loaddata 
+# TODO: I don't know if this target works.
+#.PHONY: fixtures
+#fixtures:
+#	$(DOCKER_RUN) ./manage.py loaddata 
 
 
 .PHONY: clean
 clean:
-	rm *.pyc
-	rm -rf __pycache__/
+	find src/ -type f -name *.pyc -delete
+	find src/ -type d -name __pycache__ -delete
 
 
 ##### CI/CD Server commands
@@ -77,9 +59,7 @@ ci-push: ci-build
 	$(eval IMAGE_ID := $(shell docker images -q $(IMAGE_NAME) | tail -n1))
 	docker tag $(IMAGE_ID) $(IMAGE_NAME):latest
 	docker tag $(IMAGE_ID) $(IMAGE_NAME):$(SITE_VERSION)
-
 	docker login -u $(DOCKER_USER) -p $(DOCKER_PASS)
 	docker push $(IMAGE_NAME)
-
 	git tag $(SITE_VERSION)
-	git push origin master --tags
+	git push github $(SITE_VERSION)
