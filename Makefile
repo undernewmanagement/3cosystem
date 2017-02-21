@@ -2,7 +2,7 @@ IMAGE_NAME := 3cosystem/website
 
 SITE_VERSION := $(shell semver.sh bump patch)
 
-DOCKER_RUN := docker run -it --rm -p 5000:5000 -v $$PWD:/usr/src/app --env-file=env 3cosystem/website
+DOCKER_RUN := docker run -it --rm -p 5000:5000 -v $$PWD:/usr/src/app --env-file=env $(IMAGE_NAME)
 
 
 .PHONY: build
@@ -53,13 +53,24 @@ ci-test: ci-build
 	docker-compose -p 3cosystem_test -f docker-compose-test.yml run --rm website /app/manage.py test
 	docker-compose -p 3cosystem_test -f docker-compose-test.yml down
 
+.PHONY: ci-git-tag
+ci-git-tag: 
+	git tag $(SITE_VERSION)
+	git push origin $(SITE_VERSION)
 
-.PHONY: ci-push
-ci-push: ci-build
+.PHONY: ci-docker-tag
+ci-docker-tag: ci-build
 	$(eval IMAGE_ID := $(shell docker images -q $(IMAGE_NAME) | tail -n1))
 	docker tag $(IMAGE_ID) $(IMAGE_NAME):latest
 	docker tag $(IMAGE_ID) $(IMAGE_NAME):$(SITE_VERSION)
+
+.PHONY: ci-push
+ci-push: ci-git-tag ci-docker-tag
 	docker login -u $(DOCKER_USER) -p $(DOCKER_PASS)
 	docker push $(IMAGE_NAME)
-	git tag $(SITE_VERSION)
-	git push origin $(SITE_VERSION)
+
+.PHONY: ci-deploy
+ci-deploy:
+	ssh dockerdeploy@dokku.m3b.net pull $(IMAGE_NAME):$(SITE_VERSION)
+	ssh dockerdeploy@dokku.m3b.net tag $(IMAGE_NAME):$(SITE_VERSION) dokku/3cosystem:$(SITE_VERSION)
+	ssh dokku@dokku.m3b.net tags:deploy 3cosystem $(SITE_VERSION)
