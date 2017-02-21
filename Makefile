@@ -69,6 +69,7 @@ ci-push: ci-git-tag ci-docker-tag
 	docker login -u $(DOCKER_USER) -p $(DOCKER_PASS)
 	docker push $(IMAGE_NAME)
 
+
 .PHONY: ci-deploy
 ci-deploy:
 	#ssh-keyscan dokku.m3b.net >> /$(HOME)/.ssh/known_hosts
