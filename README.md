@@ -12,6 +12,9 @@ That is the meta-repo with all the sexy task-runners and glue that gets this who
 Still here? Then let's dig in!
 
 # Development
+Before starting you need to copy `env.sample` to `env`. That is the environment file which will help you to
+more easily stand up services to testing.
+
 We live in a Docker world, and I'm a Docker girl. That means the preferred way to develop, test, and deploy
  is using Docker.
 
@@ -39,9 +42,12 @@ Configuration is done through environment variables:
 | `GOOGLE_ANALYTICS` | UA-\*\*\*\*\*\*\*\*\* Key for google analytics|
 | `SITE_VERSION` | The software version of the website. Note, this is set in the docker image when it is built. DO NOT SET THIS VARIABLE WHEN YOU START THE CONTAINER! Check the Dockerfile |
 
-## Various django commands
+## Various make commands
 There is a `Makefile` task-runner to help you run database migrations and load fixtures.  
 
+  - `make build` will build the docker image locally
+  - `make run` will run the docker image with optional command (use `CMD="your command" make run`)
+  - `make test` will run tests locally
   - `make migrate` will run Django `manage.py makemigrations && manage.py migrate` (this will load countries, cities, and their long, lat)
   - `make fixtures` will run Django load fixtures into a newly provisioned database
   - `make cachetable` will have Django create the cache table in postgres for view caching.
