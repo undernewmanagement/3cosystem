@@ -4,10 +4,11 @@ SITE_VERSION := $(shell semver.sh bump patch)
 
 DOCKER_RUN := docker run -it --rm -p 5000:5000 -v $$PWD:/usr/src/app --env-file=env $(IMAGE_NAME)
 
+DOCKER_TAG := $(IMAGE_NAME):$(SITE_VERSION)
 
 .PHONY: build
 build:
-	docker build --build-arg SITE_VERSION=$(SITE_VERSION) -t $(IMAGE_NAME) .
+	docker build --build-arg SITE_VERSION=$(SITE_VERSION) -t $(DOCKER_TAG) .
 
 
 .PHONY: run
@@ -58,16 +59,10 @@ ci-git-tag:
 	git tag $(SITE_VERSION)
 	git push origin $(SITE_VERSION)
 
-.PHONY: ci-docker-tag
-ci-docker-tag: ci-build
-	$(eval IMAGE_ID := $(shell docker images -q $(IMAGE_NAME) | tail -n1))
-	docker tag $(IMAGE_ID) $(IMAGE_NAME):latest
-	docker tag $(IMAGE_ID) $(IMAGE_NAME):$(SITE_VERSION)
-
 .PHONY: ci-push
-ci-push: ci-git-tag ci-docker-tag
+ci-push: ci-git-tag 
 	docker login -u $(DOCKER_USER) -p $(DOCKER_PASS)
-	docker push $(IMAGE_NAME)
+	docker push $(DOCKER_TAG)
 
 
 .PHONY: ci-deploy
