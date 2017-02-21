@@ -71,6 +71,7 @@ ci-push: ci-git-tag ci-docker-tag
 
 .PHONY: ci-deploy
 ci-deploy:
+	#ssh-keyscan dokku.m3b.net >> /$(HOME)/.ssh/known_hosts
 	ssh dockerdeploy@dokku.m3b.net pull $(IMAGE_NAME):$(SITE_VERSION)
 	ssh dockerdeploy@dokku.m3b.net tag $(IMAGE_NAME):$(SITE_VERSION) dokku/3cosystem:$(SITE_VERSION)
 	ssh dokku@dokku.m3b.net tags:deploy 3cosystem $(SITE_VERSION)
