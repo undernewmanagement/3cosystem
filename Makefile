@@ -45,30 +45,31 @@ clean:
 
 ##### CI/CD Server commands
 
-.PHONY: ci-build
-ci-build: build
+.PHONY: ci-deploy
+ci-deploy: build
 
-
-.PHONY: ci-test
-ci-test: ci-build
+	@echo "****************"
+	@echo "Running tests..."
+	@echo "****************"
 	docker-compose -p 3cosystem_test -f docker-compose-test.yml run --rm website /app/manage.py test
 	docker-compose -p 3cosystem_test -f docker-compose-test.yml down
 
-.PHONY: ci-git-tag
-ci-git-tag: 
+	@echo "***************************"
+	@echo "Tagging and pushing repo..."
+	@echo "***************************"
 	git tag $(SITE_VERSION)
 	git push origin $(SITE_VERSION)
 
-.PHONY: ci-push
-ci-push: ci-git-tag 
+	@echo "***********************"
+	@echo "Pushing docker image..."
+	@echo "***********************"
 	docker login -u $(DOCKER_USER) -p $(DOCKER_PASS)
 	docker push $(DOCKER_TAG)
 
-
-.PHONY: ci-deploy
-ci-deploy:
-	$(eval TAG := $(shell semver.sh current))
+	@echo "************"
+	@echo "Deploying..."
+	@echo "************"
 	ssh-keyscan dokku.m3b.net >> /$(HOME)/.ssh/known_hosts
-	ssh dockerdeploy@dokku.m3b.net pull $(IMAGE_NAME):$(TAG)
-	ssh dockerdeploy@dokku.m3b.net tag $(IMAGE_NAME):$(TAG) dokku/3cosystem:$(TAG)
-	ssh dokku@dokku.m3b.net tags:deploy 3cosystem $(TAG)
+	ssh dockerdeploy@dokku.m3b.net pull $(IMAGE_NAME):$(SITE_VERSION)
+	ssh dockerdeploy@dokku.m3b.net tag $(IMAGE_NAME):$(SITE_VERSION) dokku/3cosystem:$(SITE_VERSION)
+	ssh dokku@dokku.m3b.net tags:deploy 3cosystem $(SITE_VERSION)
