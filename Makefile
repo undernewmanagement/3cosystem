@@ -67,7 +67,8 @@ ci-push: ci-git-tag
 
 .PHONY: ci-deploy
 ci-deploy:
+	$(eval TAG := $(shell semver.sh current))
 	ssh-keyscan dokku.m3b.net >> /$(HOME)/.ssh/known_hosts
-	ssh dockerdeploy@dokku.m3b.net pull $(IMAGE_NAME):$(SITE_VERSION)
-	ssh dockerdeploy@dokku.m3b.net tag $(IMAGE_NAME):$(SITE_VERSION) dokku/3cosystem:$(SITE_VERSION)
-	ssh dokku@dokku.m3b.net tags:deploy 3cosystem $(SITE_VERSION)
+	ssh dockerdeploy@dokku.m3b.net pull $(IMAGE_NAME):$(TAG)
+	ssh dockerdeploy@dokku.m3b.net tag $(IMAGE_NAME):$(TAG) dokku/3cosystem:$(TAG)
+	ssh dokku@dokku.m3b.net tags:deploy 3cosystem $(TAG)
