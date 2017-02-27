@@ -1,5 +1,3 @@
-IMAGE_NAME := 3cosystem/website
-
 SITE_VERSION := $(shell semver.sh bump patch)
 
 DOCKER_RUN := docker run -it --rm -p 5000:5000 -v $$PWD:/usr/src/app --env-file=env $(IMAGE_NAME)
@@ -51,8 +49,8 @@ ci-deploy: build
 	@echo "****************"
 	@echo "Running tests..."
 	@echo "****************"
-	docker-compose -p 3cosystem_test -f docker-compose-test.yml run --rm website /app/manage.py test
-	docker-compose -p 3cosystem_test -f docker-compose-test.yml down
+	docker-compose -p $(DOKKU_APP_NAME)_test -f docker-compose-test.yml run --rm website /app/manage.py test
+	docker-compose -p $(DOKKU_APP_NAME)_test -f docker-compose-test.yml down
 
 	@echo "***************************"
 	@echo "Tagging and pushing repo..."
@@ -69,7 +67,12 @@ ci-deploy: build
 	@echo "************"
 	@echo "Deploying..."
 	@echo "************"
-	ssh-keyscan dokku.m3b.net >> /$(HOME)/.ssh/known_hosts
-	ssh dockerdeploy@dokku.m3b.net pull $(IMAGE_NAME):$(SITE_VERSION)
-	ssh dockerdeploy@dokku.m3b.net tag $(IMAGE_NAME):$(SITE_VERSION) dokku/3cosystem:$(SITE_VERSION)
-	ssh dokku@dokku.m3b.net tags:deploy 3cosystem $(SITE_VERSION)
+	ssh-keyscan $(DOKKU_HOST) >> /$(HOME)/.ssh/known_hosts
+	ssh $(DOKKU_DEPLOY_USER)@$(DOKKU_HOST) pull $(IMAGE_NAME):$(SITE_VERSION)
+	ssh $(DOKKU_DEPLOY_USER)@$(DOKKU_HOST) tag $(IMAGE_NAME):$(SITE_VERSION) dokku/$(DOKKU_APP_NAME):$(SITE_VERSION)
+	ssh dokku@$(DOKKU_HOST) tags:deploy $(DOKKU_APP_NAME) $(SITE_VERSION)
+
+.PHONY: bump
+bump:
+	git commit -m 'dummy bump' bumpfile
+	git push github master
