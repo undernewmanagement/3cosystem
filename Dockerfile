@@ -1,30 +1,30 @@
-FROM python:3
+FROM python:3.6-slim
 
 # Pass the command line arg into the ENV arg, persisting it in the docker image
 ARG SITE_VERSION
 ENV SITE_VERSION=$SITE_VERSION
+ENV PYTHONUNBUFFERED=1
 
 # Install binutils so that geodjango works
 RUN apt-get update \
     && apt-get install -y binutils libproj-dev gdal-bin
 
 # Requirements have to be pulled and installed here, otherwise caching won't work
-COPY ./src/requirements.txt /requirements.txt
+COPY requirements.txt /requirements.txt
 
-RUN pip install -r /requirements.txt \
-    && groupadd -r django \
-    && useradd -r -g django django \
-    && mkdir /app 
+RUN pip install --upgrade pip
+
+RUN pip install --no-cache-dir -r /requirements.txt && \
+    mkdir /app 
 
 COPY src /app
-RUN chown -R django /app
 
-COPY start-server.sh /start-server.sh
-COPY entrypoint.sh /entrypoint.sh
-COPY Procfile /app
-RUN chmod +x /*.sh
+COPY env.build /env.build
+RUN ( set -a; . /env.build; set +a; python manage.py collectstatic --noinput)
+RUN rm /env.build
 
-EXPOSE 5000
+WORKDIR /app
 
-ENTRYPOINT ["/entrypoint.sh"]
-CMD ["/bin/bash", "/start-server.sh"]
+EXPOSE 8000
+
+CMD ["gunicorn", "wsgi:app", "-c", "gunicorn_config.py"]
