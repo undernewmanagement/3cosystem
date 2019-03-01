@@ -1,0 +1,11 @@
+BeautifulSoup4
+Django
+django-location-field
+gunicorn
+icalendar
+psycopg2-binary
+requests
+whitenoise
+dj_database_url
+dj_email_url
+python-dotenv
