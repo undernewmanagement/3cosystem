@@ -1,7 +1,0 @@
-{
-  "scripts": {
-    "dokku": {
-      "postdeploy": "/post-deploy.sh"
-    }
-  },
-}
