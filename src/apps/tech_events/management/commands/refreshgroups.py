@@ -1,7 +1,3 @@
-import sys
-reload(sys)
-sys.setdefaultencoding("utf-8")
-
 from django.core.management.base import BaseCommand, CommandError
 from apps.tech_events.models import MeetupGroup
 from apps.tech_events.models import TechEvent
@@ -48,5 +44,3 @@ class Command(BaseCommand):
 
             except ValueError:
                 self.stdout.write('[ERROR] - Getting "%s"' % instance.name)
-                
-
