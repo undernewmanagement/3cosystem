@@ -23,7 +23,8 @@ Standing up a local development environment is simple
   1. install requirements with `pip install -r requirements.txt`
   1. migrate the database: `./manage.py migrate`
   1. import some fixtures: `./manage.py loaddata data/geography`
-  1. cretae your superuser: `./manage.py createsuperuser`
+  1. create your superuser: `./manage.py createsuperuser`
+  1. create your cache table: `./manage.py createcachetable`
   1. start the firehose task in a separate terminal: `./manage.py firehose`
   1. start your web process: `./manage.py runserver 0.0.0.0:8000` 
   
