@@ -36,13 +36,12 @@ class Country(models.Model):
 class City(models.Model):
     short_name = models.CharField(max_length=50)
     long_name = models.CharField(max_length=50)
-    country = models.ForeignKey('Country', related_name="cities")
+    country = models.ForeignKey('Country', related_name="cities", on_delete=models.CASCADE)
     slug = models.SlugField(unique=True)
     distance = models.IntegerField()
     is_active = models.BooleanField(default=False)
     ecosystem_is_active = models.BooleanField(default=False)
     location = LocationField(based_fields=[long_name], zoom=7, default='POINT(0.0 0.0)')
-    objects = models.GeoManager()
     hashtags = models.CharField(max_length=50, blank=True, null=True )
 
     class Meta:
@@ -56,4 +55,4 @@ class Attribution(models.Model):
     name = models.CharField(max_length=100)
     url = models.URLField(max_length=255)
     comments = models.CharField(max_length=255,blank=True)
-    city = models.ForeignKey('City', related_name="attributions")
+    city = models.ForeignKey('City', related_name="attributions", on_delete=models.CASCADE)

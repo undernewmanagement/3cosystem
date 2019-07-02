@@ -6,4 +6,4 @@ accesslog = "-"
 errorlog = "-"
 forwarded_allow_ips = "*"
 proxy_allow_ips = "*"
-
+pythonpath='/app/website'

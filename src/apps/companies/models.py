@@ -39,7 +39,6 @@ class Company(models.Model):
     cities = models.ManyToManyField('geography.City')
     is_active = models.BooleanField(default=False)
     location = LocationField(based_fields=[full_address], zoom=7, default='POINT(0.0 0.0)')
-    objects = models.GeoManager()
     
     class Meta:
         verbose_name_plural = 'Companies'

@@ -19,12 +19,10 @@ RUN pip install --no-cache-dir -r /requirements.txt && \
 
 COPY src /app
 
-COPY env.build /env.build
+WORKDIR /app
+
+COPY env.sample /env.build
 RUN ( set -a; . /env.build; set +a; python manage.py collectstatic --noinput)
 RUN rm /env.build
 
-WORKDIR /app
-
-EXPOSE 8000
-
-CMD ["gunicorn", "wsgi:app", "-c", "gunicorn_config.py"]
+CMD ["gunicorn", "wsgi:application", "-c", "gunicorn_config.py"]

@@ -1,4 +1,20 @@
 import os
+
+import dj_database_url
+import dj_email_url
+from dotenv import load_dotenv, find_dotenv
+
+import sentry_sdk
+from sentry_sdk.integrations.django import DjangoIntegration
+
+load_dotenv(find_dotenv('env'))
+
+
+sentry_sdk.init(
+    dsn=os.getenv('SENTRY_DSN'),
+    integrations=[DjangoIntegration()]
+)
+
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 PROJECT_DIR = BASE_DIR
@@ -6,12 +22,10 @@ PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 STATIC_ROOT = os.path.join(PROJECT_DIR, 'staticfiles')
 
 SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
-DEBUG = os.getenv('DEV_ENV', 'dev') == 'dev'
+DEBUG = os.getenv('DEV_ENV') == 'development'
 
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS').split(',')
+ALLOWED_HOSTS = ['*']
 SITE_VERSION = os.getenv('SITE_VERSION')
-
-GOOGLE_ANALYTICS = os.getenv('GOOGLE_ANALYTICS')
 
 # Application definition
 
@@ -31,13 +45,13 @@ INSTALLED_APPS = (
     'website'
 )
 
-MIDDLEWARE_CLASSES = (
+MIDDLEWARE = (
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
+    # 'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
@@ -49,13 +63,7 @@ WSGI_APPLICATION = 'website.wsgi.application'
 
 # Database Configuration
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.contrib.gis.db.backends.postgis',
-        'NAME': os.getenv('DB_NAME'),
-        'USER': os.getenv('DB_USER'),
-        'PASSWORD': os.getenv('DB_PASS'),
-        'HOST': os.getenv('DB_HOST')
-    }
+    'default': dj_database_url.config(conn_max_age=600)
 }
 
 # Internationalization
@@ -110,21 +118,24 @@ TEMPLATES = [
 
 # Email configuration
 ADMINS = [('Mark', 'mark@m3b.net'), ]
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+SERVER_EMAIL = "no-reply@3cosystem.com"
 
-SERVER_EMAIL = os.getenv('SERVER_EMAIL')
-EMAIL_HOST = os.getenv('EMAIL_HOST')
-EMAIL_PORT = os.getenv('EMAIL_PORT')
-EMAIL_HOST_USER = os.getenv('EMAIL_USER')
-EMAIL_HOST_PASSWORD = os.getenv('EMAIL_PASS')
-EMAIL_USE_TLS = True
+email_config = dj_email_url.config()
+
+EMAIL_HOST_USER = email_config['EMAIL_HOST_USER']
+EMAIL_HOST_PASSWORD = email_config['EMAIL_HOST_PASSWORD']
+EMAIL_HOST = email_config['EMAIL_HOST']
+EMAIL_PORT = email_config['EMAIL_PORT']
+EMAIL_BACKEND = email_config['EMAIL_BACKEND']
+EMAIL_USE_TLS = email_config['EMAIL_USE_TLS']
+EMAIL_USE_SSL = email_config['EMAIL_USE_SSL']
 
 
 # Cache configuration
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.db.DatabaseCache',
-        'LOCATION': 'django_cache_table',
+        'LOCATION': 'cache_table',
     }
 }
 
@@ -139,7 +150,7 @@ LOGGING = {
     'loggers': {
         'django': {
             'handlers': ['console'],
-            'level': os.getenv('DJANGO_LOG_LEVEL', 'INFO'),
+            'level': 'INFO',
         },
     },
 }

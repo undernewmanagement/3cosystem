@@ -7,18 +7,15 @@ import requests
 from bs4 import BeautifulSoup
 
 from icalendar import Calendar
+from website.utils import retry_request
 
 
 class MeetupGroup(models.Model):
 
-    url = models.CharField(
-            max_length=100,
-            unique=True,
-            validators=[validate_meetup_url_exists])
+    url = models.CharField(max_length=100, unique=True, validators=[validate_meetup_url_exists])
     name = models.CharField(max_length=100)
     is_blacklisted = models.BooleanField(default=False)
     location = models.PointField(null=True)
-    objects = models.GeoManager()
 
     class Meta:
         verbose_name_plural = "Meetup Groups"
@@ -50,7 +47,8 @@ class TechEvent(models.Model):
                               default=CUSTOM)
     meetup_group = models.ForeignKey(MeetupGroup,
                                      null=True,
-                                     blank=True)
+                                     blank=True,
+                                     on_delete=models.CASCADE)
     is_active = models.BooleanField(default=True)
     address = models.CharField(max_length=255)
     city = models.CharField(max_length=100, null=True)
@@ -61,7 +59,6 @@ class TechEvent(models.Model):
                     zoom=7,
                     default='POINT (0.0 0.0)'
                 )
-    objects = models.GeoManager()
 
     class Meta:
         verbose_name_plural = "Events"
@@ -88,17 +85,18 @@ class ParseError(models.Model):
 def meetup_group_pre_save(sender, instance, **kwargs):
 
     if instance.is_blacklisted is False:
-        headers = {
-            'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.71 Safari/537.36',
-        }
 
         url = 'https://www.meetup.com/%s' % instance.url
-        r = requests.get(url, headers=headers)
-        html = BeautifulSoup(r.text)
-        (lat, lng) = html.findAll(
-                'meta',
-                attrs={"name": "geo.position"})[0]['content'].split(';')
-        instance.name = html.h1.span.text[:255]
+
+        r = retry_request(url)
+
+        html = BeautifulSoup(r.text, features="html.parser")
+
+        res = html.findAll('meta', attrs={"property": "geo.position"})
+        (lat, lng) = res[0]['content'].split(';')
+
+        instance.name = html.h1.a.text[:255]
+
         instance.location = 'POINT(%s %s)' % (lng, lat)
 
 

@@ -1,6 +1,10 @@
 from datetime import datetime
 from collections import OrderedDict
 
+import requests
+from requests.adapters import HTTPAdapter
+from urllib3 import Retry
+
 
 def reshape_events(events):
     """
@@ -51,3 +55,24 @@ def reshape_events(events):
     # sort the items
     return OrderedDict((datetime.strftime(k, '%d-%m-%Y'), v)
                        for k, v in sorted(out.items()))
+
+def retry_request(url):
+    """
+    taken from here: https://stackoverflow.com/a/35504626/1646663
+
+    :param url:
+    :return:
+    """
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.71 Safari/537.36',
+    }
+
+    s = requests.Session()
+
+    retries = Retry(total=5,
+                    backoff_factor=0.1,
+                    status_forcelist=[500, 502, 503, 504])
+
+    s.mount('https://', HTTPAdapter(max_retries=retries))
+
+    return s.get(url, headers=headers)

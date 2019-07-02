@@ -20,23 +20,29 @@ def home(request):
     end_date = today + timedelta(days=31)
 
     ret = []
+
     for country in countries:
+
         carr = {
             'country': country.name,
             'cities': [],
         }
+
         for city in country.cities.filter(is_active=True).all():
+
             t = TechEvent.objects\
                     .filter(location__distance_lte=(city.location, D(m=city.distance*1000)))\
                     .filter(is_active=True)\
                     .filter(meetup_group__is_blacklisted=False)\
                     .filter(begin_time__range=(today, end_date))\
                     .order_by('begin_time').count()
+
             carr['cities'].append({
                 'name': city.short_name,
                 'slug': city.slug,
                 'count': t
             })
+
         ret.append(carr)
 
     return render(request, 'website/home.html', {
