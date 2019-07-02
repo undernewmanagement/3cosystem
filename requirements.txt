@@ -9,3 +9,5 @@ whitenoise
 dj_database_url
 dj_email_url
 python-dotenv
+retrying
+sentry-sdk==0.7.4
