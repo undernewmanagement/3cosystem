@@ -41,7 +41,7 @@ class TechEvent(models.Model):
     uniqid = models.CharField(max_length=50, unique=True)
     name = models.CharField(max_length=255)
     url = models.URLField()
-    begin_time = models.DateTimeField('begin time')
+    begin_time = models.DateTimeField('begin time', db_index=True)
     source = models.CharField(max_length=2,
                               choices=SOURCE_CHOICES,
                               default=CUSTOM)
