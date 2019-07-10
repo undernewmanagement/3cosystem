@@ -20,7 +20,7 @@ class MeetupGroup(models.Model):
     class Meta:
         verbose_name_plural = "Meetup Groups"
 
-    def __unicode__(self):
+    def __str__(self):
         return self.url
 
 
@@ -55,7 +55,7 @@ class TechEvent(models.Model):
     postal_code = models.CharField(max_length=20, null=True)
     country = models.CharField(max_length=50, null=True)
     location = LocationField(
-                    based_fields=[address, city, postal_code],
+                    based_fields=['address', 'city', 'postal_code'],
                     zoom=7,
                     default='POINT (0.0 0.0)'
                 )
@@ -63,7 +63,7 @@ class TechEvent(models.Model):
     class Meta:
         verbose_name_plural = "Events"
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
 
@@ -77,7 +77,7 @@ class ParseError(models.Model):
     class Meta:
         verbose_name_plural = 'Firehose Parse Errors'
 
-    def __unicode__(self):
+    def __str__(self):
         return self.error_message
 
 

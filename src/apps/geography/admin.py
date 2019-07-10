@@ -8,11 +8,12 @@ class AttributionInline(admin.TabularInline):
 
 class CityAdmin(admin.ModelAdmin):
     inlines = [AttributionInline, ]
-    list_display = ('long_name',)
+    list_filter = ('country', )
+    list_display = ('short_name', 'country')
 
 
 class CountryAdmin(admin.ModelAdmin):
-    list_display = ('name',)
+    list_display = ('name', )
 
 admin.site.register(Country, CountryAdmin)
 admin.site.register(City, CityAdmin)

@@ -14,7 +14,7 @@ class Category(models.Model):
     class Meta:
         verbose_name_plural = 'Categories'
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
 
@@ -22,7 +22,7 @@ class Stage(models.Model):
     name = models.CharField(max_length=100)
     weight = models.IntegerField(blank=True, default=0)
     
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
 
@@ -43,5 +43,5 @@ class Company(models.Model):
     class Meta:
         verbose_name_plural = 'Companies'
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
