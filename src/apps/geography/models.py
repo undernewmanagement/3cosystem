@@ -41,7 +41,7 @@ class City(models.Model):
     distance = models.IntegerField()
     is_active = models.BooleanField(default=False)
     ecosystem_is_active = models.BooleanField(default=False)
-    location = LocationField(based_fields=[long_name], zoom=7, default='POINT(0.0 0.0)')
+    location = LocationField(based_fields=['long_name'], zoom=7, default='POINT(0.0 0.0)')
     hashtags = models.CharField(max_length=50, blank=True, null=True )
 
     class Meta:
